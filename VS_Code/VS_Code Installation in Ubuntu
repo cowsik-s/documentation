@@ -1,0 +1,10 @@
+VSCode is now available as DEB file. You can download it and then run:
+
+sudo dpkg -i ~/path/to/code_1.XXX.deb
+
+In case dpkg complains about missing dependencies, run:
+
+sudo apt -f install
+
+
+Reference: https://askubuntu.com/questions/616075/how-do-i-install-visual-studio-code
