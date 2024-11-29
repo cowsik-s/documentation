@@ -1,0 +1,135 @@
+Since Jenkins is running with the `jenkins.war` file and not as a service, let's ensure it's correctly set up and accessible. Here are some steps to troubleshoot and resolve the issue:
+
+1. **Check Jenkins Process**:
+   - Ensure Jenkins is running. You should see the process if you use the following command:
+     ```bash
+     ps aux | grep jenkins.war
+     ```
+
+2. **Verify Jenkins Port**:
+   - Make sure Jenkins is running on the correct port (default is 8080). You can specify the port when starting Jenkins:
+     ```bash
+     java -jar jenkins.war --httpPort=8080
+     ```
+
+3. **Firewall Settings**:
+   - Ensure the firewall is not blocking the Jenkins port. Allow the port using:
+     ```bash
+     sudo ufw allow 8080
+     sudo ufw reload
+     ```
+
+4. **Check Logs**:
+   - Review the Jenkins logs for any errors. If you started Jenkins with the `jenkins.war` file, the logs should be output to the terminal. Look for any error messages that might indicate why Jenkins isn't accessible.
+
+5. **Network Configuration**:
+   - Ensure there are no network issues preventing access to port 8080. You can use `netstat` to check if Jenkins is listening on the correct port:
+     ```bash
+     sudo netstat -tuln | grep 8080
+     ```
+
+6. **Browser URL**:
+   - Make sure you are using the correct URL in your browser: `http://192.168.1.11:8080`.
+
+If Jenkins is still not accessible, you might want to try restarting it:
+
+```bash
+# Stop Jenkins if it's running
+pkill -f jenkins.war
+
+# Start Jenkins again
+java -jar jenkins.war --httpPort=8080
+```
+
+If you encounter any specific error messages, please share them, and I can help you further troubleshoot the issue.
+
+
+
+The `netstat` command is not found because the `net-tools` package, which includes `netstat`, is not installed by default on newer versions of Ubuntu. You can install it using the following command:
+
+```bash
+sudo apt update
+sudo apt install net-tools
+```
+
+After installing `net-tools`, you should be able to use the `netstat` command. Try running the command again:
+
+```bash
+sudo netstat -tuln | grep 8080
+```
+
+Alternatively, you can use the `ss` command, which is a modern replacement for `netstat`:
+
+```bash
+sudo ss -tuln | grep 8080
+```
+
+This will provide similar information about listening ports and services. Let me know if you need any further assistance!
+
+
+The error message indicates that another process is currently using the package manager, which is why you can't install `net-tools` right now. This is often due to automatic updates running in the background. Here are a few steps to resolve this:
+
+1. **Wait for the Process to Complete**:
+   - Sometimes, the process will finish on its own after a few minutes. You can try running the command again after waiting for a bit.
+
+2. **Identify and Kill the Process**:
+   - If the process doesn't complete, you can manually stop it. First, identify the process using the lock:
+     ```bash
+     sudo lsof /var/lib/dpkg/lock-frontend
+     ```
+   - This will show you the process ID (PID) holding the lock. You can then kill the process:
+     ```bash
+     sudo kill -9 <PID>
+     ```
+
+3. **Remove the Lock Files**:
+   - If the above steps don't work, you can remove the lock files manually:
+     ```bash
+     sudo rm /var/lib/dpkg/lock-frontend
+     sudo rm /var/lib/dpkg/lock
+     ```
+
+4. **Reconfigure the Packages**:
+   - After removing the lock files, reconfigure the packages to ensure everything is in order:
+     ```bash
+     sudo dpkg --configure -a
+     ```
+
+5. **Install `net-tools`**:
+   - Now, try installing `net-tools` again:
+     ```bash
+     sudo apt install net-tools
+     ```
+
+These steps should help you resolve the lock issue and allow you to install `net-tools`. Let me know if you encounter any further issues!
+
+
+Great! This output indicates that Jenkins is listening on port 8080. Since Jenkins is running and listening on the correct port, but you still can't access it via the browser, let's check a few more things:
+
+1. **Browser URL**:
+   - Ensure you are using the correct URL in your browser: `http://192.168.1.11:8080`.
+
+2. **Firewall Settings**:
+   - Double-check that the firewall is not blocking port 8080. You can allow the port using:
+     ```bash
+     sudo ufw allow 8080
+     sudo ufw reload
+     ```
+
+3. **Jenkins Logs**:
+   - Review the Jenkins logs for any errors that might indicate why it's not accessible. Since you're running Jenkins with the `jenkins.war` file, the logs should be output to the terminal where you started Jenkins. Look for any error messages.
+
+4. **Network Configuration**:
+   - Ensure there are no network issues preventing access to port 8080. You can use `curl` from another machine to test connectivity:
+     ```bash
+     curl http://192.168.1.11:8080
+     ```
+
+5. **Restart Jenkins**:
+   - Sometimes, restarting Jenkins can resolve issues. Stop Jenkins if it's running and start it again:
+     ```bash
+     pkill -f jenkins.war
+     java -jar jenkins.war --httpPort=8080
+     ```
+
+If you've checked all these and it's still not working, please share any specific error messages from the Jenkins logs or any other details that might help diagnose the issue further.

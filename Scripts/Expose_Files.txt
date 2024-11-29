@@ -1,0 +1,44 @@
+A simple Python script to create an HTTP server that serves files from the /home/osboxes directory.
+This will allow you to access these files from your laptop's browser using the VM's IP address.
+
+Here's a Python3 script to achieve this:
+
+import http.server
+import socketserver
+
+# Define the handler to serve files from /home/osboxes
+handler = http.server.SimpleHTTPRequestHandler
+handler.directory = "/home/osboxes"
+
+# Define the port to expose
+PORT = 8000
+
+# Create the server object
+with socketserver.TCPServer(("", PORT), handler) as httpd:
+    print(f"Serving files from /home/osboxes at http://192.168.1.11:{PORT}")
+    # Serve files until interrupted
+    httpd.serve_forever()
+Steps to Run the Script:
+Save the Script:
+
+Save the above script to a file, for example, serve_files.py.
+Run the Script:
+
+Open a terminal in your Ubuntu VM.
+Navigate to the directory where you saved serve_files.py.
+Run the script using Python3:
+python3 serve_files.py
+Access the Files:
+
+Open a browser on your laptop.
+Go to http://192.168.1.11:8000.
+You should see the directory listing of /home/osboxes and be able to access the files.
+Troubleshooting:
+Port Already in Use:
+
+If you encounter an error indicating that the port is already in use, you can either stop the process using that port or choose a different port by changing the PORT variable in the script.
+Firewall Settings:
+
+Ensure that your VM's firewall allows incoming connections on the specified port (8000 in this case). You can allow the port using:
+sudo ufw allow 8000
+sudo ufw reload
