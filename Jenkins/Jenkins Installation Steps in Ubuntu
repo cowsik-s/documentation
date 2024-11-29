@@ -1,68 +1,44 @@
-Eb59431f6f6d44acabf5076e8d774012
-
-
-It looks like Jenkins requires a newer version of Java (Java 17 or Java 21) to run. You can upgrade your Java version to meet this requirement. Here's how you can install Java 17 on Ubuntu:
-
-### Step 1: Add the OpenJDK 17 Repository
+Step 1: Add the OpenJDK 17 Repository
 1. Open a terminal and add the OpenJDK 17 repository:
-```bash
 sudo add-apt-repository ppa:openjdk-r/ppa
-```
 
-### Step 2: Update Your Package List
-```bash
+
+Step 2: Update Your Package List
 sudo apt update
-```
 
-### Step 3: Install OpenJDK 17
-```bash
+Step 3: Install OpenJDK 17
 sudo apt install openjdk-17-jdk
-```
 
-### Step 4: Verify the Installation
+
+Step 4: Verify the Installation
 Check the Java version to ensure it's correctly installed:
-```bash
 java -version
-```
 
-### Step 5: Start Jenkins Using Java 17
+
+Step 5: Start Jenkins Using Java 17
 Navigate to the directory where you downloaded the `jenkins.war` file and start Jenkins:
-```bash
 java -jar jenkins.war
-```
-
-You should now be able to access Jenkins at `http://localhost:8080` without any version compatibility issues.
-
-Does this help resolve your issue?
 
 
-
-Got it! Here are the steps to install Apache and configure it to serve Jenkins at `http://jenkins.aig`:
-
-### Step 1: Install Apache
+Steps to install Apache and configure it to serve Jenkins:
+Step 1: Install Apache
 1. Open a terminal and run the following command to install Apache:
-```bash
 sudo apt update
 sudo apt install apache2
-```
 
-### Step 2: Enable Required Apache Modules
-1. Enable the necessary Apache modules for proxying:
-```bash
+Step 2: Enable Required Apache Modules
+Enable the necessary Apache modules for proxying:
 sudo a2enmod proxy
 sudo a2enmod proxy_http
 sudo a2enmod headers
 sudo a2enmod proxy_wstunnel
 sudo a2enmod rewrite
-```
 
-### Step 3: Configure Apache Virtual Host
-1. Create a new virtual host configuration file for Jenkins:
-```bash
+Step 3: Configure Apache Virtual Host
+Create a new virtual host configuration file for Jenkins:
 sudo nano /etc/apache2/sites-available/jenkins.conf
-```
-2. Add the following configuration to the file:
-```apache
+
+Add the following configuration to the file:
 <VirtualHost *:80>
     ServerName jenkins.aig
     ProxyPreserveHost On
@@ -78,36 +54,28 @@ sudo nano /etc/apache2/sites-available/jenkins.conf
         Allow from all
     </Proxy>
 </VirtualHost>
-```
-3. Save and close the file.
 
-### Step 4: Enable the Virtual Host
-1. Enable the new virtual host configuration:
-```bash
+Save and close the file.
+
+Step 4: Enable the Virtual Host
+Enable the new virtual host configuration:
 sudo a2ensite jenkins.conf
-```
 
-### Step 5: Restart Apache
-1. Restart Apache to apply the changes:
-```bash
+Step 5: Restart Apache
+Restart Apache to apply the changes:
 sudo systemctl restart apache2
-```
-
-### Step 6: Verify Configuration
-1. Open your web browser and go to `http://jenkins.aig`. You should see the Jenkins setup screen.
-
-That's it! You should now have Jenkins accessible via `http://jenkins.aig` using Apache as a reverse proxy. If you encounter any issues or have further questions, feel free to ask!
 
 
-Thanks for letting me know. Since Jenkins is running on `localhost:8080`, we need to adjust the Apache configuration to forward requests to this URL properly.
+Step 6: Verify Configuration
+Open your web browser and go to `http://jenkins.aig`. You should see the Jenkins setup screen.
 
-### Step 1: Update Apache Virtual Host Configuration
+You should now have Jenkins accessible via `http://jenkins.aig` using Apache as a reverse proxy. 
+
+Step 1: Update Apache Virtual Host Configuration
 1. Open the virtual host configuration file for Jenkins:
-```bash
 sudo nano /etc/apache2/sites-available/jenkins.conf
-```
+
 2. Update the configuration to forward the root URL to Jenkins:
-```apache
 <VirtualHost *:80>
     ServerName jenkins.aig
     ProxyPreserveHost On
@@ -123,61 +91,48 @@ sudo nano /etc/apache2/sites-available/jenkins.conf
         Allow from all
     </Proxy>
 </VirtualHost>
-```
+
 3. Save the file and exit the editor.
 
-### Step 2: Disable the Default Apache Site
-1. To prevent the default Apache page from appearing, disable the default site:
-```bash
+Step 2: Disable the Default Apache Site
+To prevent the default Apache page from appearing, disable the default site:
 sudo a2dissite 000-default.conf
-```
 
-### Step 3: Enable the Jenkins Virtual Host
-1. Enable the Jenkins virtual host configuration if it isn't already enabled:
-```bash
+Step 3: Enable the Jenkins Virtual Host
+Enable the Jenkins virtual host configuration if it isn't already enabled:
 sudo a2ensite jenkins.conf
-```
 
-### Step 4: Restart Apache
-1. Restart Apache to apply the changes:
-```bash
+Step 4: Restart Apache
+Restart Apache to apply the changes:
 sudo systemctl restart apache2
-```
 
-### Step 5: Verify DNS Resolution
-1. Ensure that the domain name `jenkins.aig` resolves to the IP address of your VM. You can do this by adding an entry in the `/etc/hosts` file on both your VM and your laptop:
-```plaintext
+
+Step 5: Verify DNS Resolution
+Ensure that the domain name `jenkins.aig` resolves to the IP address of your VM. 
+You can do this by adding an entry in the `/etc/hosts` file on both your VM and your laptop:
 192.168.1.100 jenkins.aig
-```
+
 Replace `192.168.1.100` with the actual IP address of your VM.
 
-### Step 6: Access Jenkins
-1. Open your web browser on your laptop and go to `http://jenkins.aig`. You should now see the Jenkins home page.
-
-If you still encounter issues, please share any error messages or logs you see, and we can troubleshoot further. 😊
-
+Step 6: Access Jenkins
+Open your web browser on your laptop and go to `http://jenkins.aig`. You should now see the Jenkins home page.
 
 ---
 
+Steps to enable an IP address for your Ubuntu VM in VMware Workstation and access it from the laptop. 
 
-
-Yes, it's possible to enable an IP address for your Ubuntu VM in VMware Workstation and access it from your laptop. Here are the steps to do that:
-
-### Step 1: Configure Network Adapter
+Step 1: Configure Network Adapter
 1. **Power off your Ubuntu VM** in VMware Workstation.
 2. **Go to the "Edit" menu** and select **"Virtual Machine Settings"**.
 3. In the **Virtual Machine Settings window**, select the **"Network Adapter"** option.
 4. Choose the **network connection type** based on your preference. For external access, select **"Bridged"** to allow your VM to share the host's network connection.
 5. Click **"OK"** to save the settings and close the window.
 
-### Step 2: Assign a Static IP Address (Optional)
-1. **Start your Ubuntu VM** and log in.
+Step 2: Assign a Static IP Address (Optional)
+1. Start your Ubuntu VM and log in.
 2. Open a terminal and edit the network configuration file:
-```bash
 sudo nano /etc/netplan/01-netcfg.yaml
-```
 3. Add the following configuration to assign a static IP address:
-```yaml
 network:
   version: 2
   ethernets:
@@ -187,120 +142,92 @@ network:
       gateway4: 192.168.1.1
       nameservers:
         addresses: [8.8.8.8, 8.8.4.4]
-```
 4. Save the file and exit the editor.
 5. Apply the changes:
-```bash
 sudo netplan apply
-```
 
-### Step 3: Access the VM from Your Laptop
+Step 3: Access the VM from Your Laptop
 1. **Find the IP address** assigned to your Ubuntu VM. You can check it by running:
-```bash
 hostname -I
-```
+
 2. Open your web browser on your laptop and enter the IP address of your VM (e.g., `http://192.168.1.100`).
 
-### Step 4: Configure Apache and Jenkins (if not already done)
+Step 4: Configure Apache and Jenkins (if not already done)
 1. Follow the previous steps to configure Apache and Jenkins to serve Jenkins at `http://jenkins.aig`.
-
-By following these steps, you should be able to access your Jenkins instance from your laptop using the specified URL. If you encounter any issues or have further questions, feel free to ask!
-
 
 ---
 
+Using PuTTY on Windows laptop to connect to your Ubuntu VM running in VMware Workstation. 
 
-No problem! You can still use PuTTY on your Windows laptop to connect to your Ubuntu VM running in VMware Workstation. Here are the steps tailored for a Windows environment:
+Step 1: Download and Install PuTTY
+1. Download PuTTY from the official website: [PuTTY Download Page](https://www.putty.org/).
+2. Install PuTTY on your Windows laptop by following the installation prompts.
 
-### Step 1: Download and Install PuTTY
-1. **Download PuTTY** from the official website: [PuTTY Download Page](https://www.putty.org/).
-2. **Install PuTTY** on your Windows laptop by following the installation prompts.
+Step 2: Configure Network Settings in VMware Workstation
+1. Power off your Ubuntu VM in VMware Workstation.
+2. Open VMware Workstation and select your VM.
+3. Go to "Edit" > "Virtual Network Editor".
+4. Select "Bridged"** under the "Network connection" options. This allows your VM to be on the same network as your host machine.
+5. Power on your Ubuntu VM.
 
-### Step 2: Configure Network Settings in VMware Workstation
-1. **Power off your Ubuntu VM** in VMware Workstation.
-2. **Open VMware Workstation** and select your VM.
-3. **Go to "Edit"** > **"Virtual Network Editor"**.
-4. Select **"Bridged"** under the **"Network connection"** options. This allows your VM to be on the same network as your host machine.
-5. **Power on your Ubuntu VM**.
-
-### Step 3: Ensure SSH is Running on Ubuntu VM
-1. **Log in to your Ubuntu VM** and open a terminal.
+Step 3: Ensure SSH is Running on Ubuntu VM
+1. Log in to your Ubuntu VM and open a terminal.
 2. Check if the SSH server is installed and running:
-```bash
 sudo systemctl status ssh
-```
 3. If SSH is not installed, install it using:
-```bash
 sudo apt update
 sudo apt install openssh-server
-```
 4. Start the SSH service if it isn't running:
-```bash
 sudo systemctl start ssh
-```
 
-### Step 4: Configure Firewall on Ubuntu VM
-1. **Ensure the firewall** on your Ubuntu VM allows SSH connections:
-```bash
+Step 4: Configure Firewall on Ubuntu VM
+1. Ensure the firewall on your Ubuntu VM allows SSH connections:
 sudo ufw allow ssh
 sudo ufw enable
-```
 
-### Step 5: Add VM's IP to Hosts File on Windows
-1. **Open Notepad** as Administrator on your Windows laptop.
-2. **Open the hosts file** located at `C:\Windows\System32\drivers\etc\hosts`.
+Step 5: Add VM's IP to Hosts File on Windows
+1. Open Notepad as Administrator on your Windows laptop.
+2. Open the hosts file located at `C:\Windows\System32\drivers\etc\hosts`.
 3. Add the following line to map your VM's IP address to the desired domain name (e.g., `jenkins.aig`):
-```plaintext
 192.168.1.11 jenkins.aig
-```
 Replace `192.168.1.11` with the actual IP address of your VM.
 4. Save the hosts file and close Notepad.
 
-### Step 6: Connect Using PuTTY
-1. **Open PuTTY** on your Windows laptop.
-2. In the **Host Name (or IP address)** field, enter `192.168.1.11` or `jenkins.aig`.
-3. Ensure the **Port** is set to `22` (the default port for SSH).
-4. Click **Open** to start the connection.
+Step 6: Connect Using PuTTY
+1. Open PuTTY on your Windows laptop.
+2. In the Host Name (or IP address) field, enter `192.168.1.11` or `jenkins.aig`.
+3. Ensure the Port is set to `22` (the default port for SSH).
+4. Click Open to start the connection.
 
-### Step 7: Check Network Connectivity
-1. **Ensure your laptop can reach the VM**. You can test this by pinging the VM's IP address from your Windows laptop:
-```plaintext
+Step 7: Check Network Connectivity
+1. Ensure your laptop can reach the VM. You can test this by pinging the VM's IP address from your Windows laptop:
+
 ping 192.168.1.11
-```
 
 These steps should help you establish an SSH connection to your Ubuntu VM using PuTTY on your Windows laptop. If you run into any issues, feel free to let me know! 😊
 
 PS: Once you connect, you should be able to access Jenkins at `http://jenkins.aig`.
 
-It looks like the SSH server is not installed on your Ubuntu VM. Let's get it installed and running:
+Incase the SSH server is not installed on your Ubuntu VM. Let's get it installed and running:
 
-### Step 1: Install OpenSSH Server
+Step 1: Install OpenSSH Server
 1. Open a terminal in your Ubuntu VM.
 2. Run the following command to install the OpenSSH server:
-```bash
 sudo apt update
 sudo apt install openssh-server
-```
 
-### Step 2: Start the SSH Service
+Step 2: Start the SSH Service
 1. Once installed, start the SSH service:
-```bash
 sudo systemctl start ssh
-```
 
-### Step 3: Enable SSH to Start on Boot
-1. To ensure the SSH service starts on boot, run:
-```bash
+Step 3: Enable SSH to Start on Boot
+To ensure the SSH service starts on boot, run:
 sudo systemctl enable ssh
-```
 
-### Step 4: Verify SSH is Running
-1. Check the status of the SSH service to ensure it's running:
-```bash
+Step 4: Verify SSH is Running
+Check the status of the SSH service to ensure it's running:
 sudo systemctl status ssh
-```
+
 You should see an "active (running)" status.
 
 After following these steps, you should be able to connect to your Ubuntu VM using PuTTY from your Windows laptop.
-
-Let me know how it goes or if you need any more help! 😊
