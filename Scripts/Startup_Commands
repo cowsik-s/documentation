@@ -16,3 +16,50 @@ ps -aux | grep python3
 sudo ufw allow 8000
 sudo ufw reload
 sudo netstat -tuln | grep 8000
+
+
+Update Network Configuration
+Identify Network Interfaces:
+
+ip a
+Edit Netplan Configuration: Open the Netplan configuration file. The file is usually located at /etc/netplan/01-netcfg.yaml or similar.
+
+sudo nano /etc/netplan/01-netcfg.yaml
+Configure Static IP: Add or modify the configuration to set a static IP. Replace eth0 with your network interface name.
+
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses:
+        - 192.168.1.100/24
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+Apply Netplan Configuration:
+
+sudo netplan apply
+Update Firewall Configuration
+Install UFW (Uncomplicated Firewall):
+
+sudo apt update
+sudo apt install ufw
+Enable UFW:
+
+sudo ufw enable
+Allow SSH Connections:
+
+sudo ufw allow ssh
+Allow Specific Ports (e.g., HTTP and HTTPS):
+
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+Allow Connections from Specific IP (e.g., your laptop's IP):
+
+sudo ufw allow from 192.168.1.50
+Check UFW Status:
+
+sudo ufw status
