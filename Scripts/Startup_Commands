@@ -1,0 +1,18 @@
+
+hostname -I
+
+sudo systemctl status apache2
+sudo systemctl start apache2
+sudo systemctl restart apache2
+
+nohup java -jar jenkins.war --httpPort=8080 &
+sudo ufw allow 8080
+sudo ufw reload
+sudo netstat -tuln | grep 8080
+
+
+nohup python3 expose_files.py &
+ps -aux | grep python3
+sudo ufw allow 8000
+sudo ufw reload
+sudo netstat -tuln | grep 8000
